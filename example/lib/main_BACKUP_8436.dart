@@ -1,5 +1,9 @@
+<<<<<<< HEAD
+import 'package:custom_chewie/custom_chewie.dart';
+=======
 import 'package:chewie/chewie.dart';
 import 'package:chewie/src/chewie_player.dart';
+>>>>>>> upstream/master
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -30,6 +34,10 @@ class _ChewieDemoState extends State<ChewieDemo> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
+    _controller = new VideoPlayerController.network(
+      'https://github.com/flutter/assets-for-api-docs/blob/master/assets/videos/butterfly.mp4?raw=true',
+=======
     _videoPlayerController1 = VideoPlayerController.network(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
     _videoPlayerController2 = VideoPlayerController.network(
@@ -52,6 +60,7 @@ class _ChewieDemoState extends State<ChewieDemo> {
       //   color: Colors.grey,
       // ),
       // autoInitialize: true,
+>>>>>>> upstream/master
     );
   }
 
