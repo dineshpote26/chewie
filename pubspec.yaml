@@ -8,9 +8,9 @@ environment:
   sdk: ">=2.0.0-dev.28.0 <3.0.0"
 
 dependencies:
-  open_iconic_flutter: ">=0.3.0 <0.4.0"
-  cached_network_image: ^0.5.0
-  flutter_android_pip: ^0.0.2
+  open_iconic_flutter:
+  cached_network_image:
+  flutter_android_pip:
   video_player:
     git: git://github.com/dineshpote26/video_player.git
 
