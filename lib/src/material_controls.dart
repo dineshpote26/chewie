@@ -280,9 +280,17 @@ class _MaterialControlsState extends State<MaterialControls> {
     );
   }
 
-  InkWell _buildPlayPause(VideoPlayerController controller) {
-    return InkWell(
-      onTap: _playPause,
+  GestureDetector _buildPlayPause(VideoPlayerController controller) {
+    return new GestureDetector(
+      onTap: (){
+        if(_hideStuff) {
+          setState(() {
+            _hideStuff = !_hideStuff;
+          });
+        }else{
+          _playPause();
+        }
+      },
       child: new Container(
         height: barHeight,
         color: Colors.transparent,
