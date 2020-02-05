@@ -44,51 +44,57 @@ class _MaterialControlsState extends State<MaterialControls> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: _hideStuff ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
-      onTap: (){
-        setState(() {
-          _hideStuff = !_hideStuff;
-        });
-      },
-      child: Stack(children: <Widget>[
-        new AnimatedOpacity(
-          opacity: _hideStuff ? 0.0 : 1.0,
-          duration: new Duration(milliseconds: 300),
-          child: new Container(
-            color: Colors.black38,
+    return  Stack(
+        children: <Widget>[
+          new AnimatedOpacity(
+            opacity: _hideStuff ? 0.0 : 1.0,
+            duration: new Duration(milliseconds: 300),
+            child: new Container(
+              color: Colors.black38,
+            ),
           ),
-        ),
-        new Column(
-          children: <Widget>[
-            _latestValue != null &&
-                        !_latestValue.isPlaying &&
-                        _latestValue.duration == null ||
-                    _latestValue != null && _latestValue.isBuffering
-                ? Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : _buildHitArea(),
-            _buildBottomBar(context, widget.controller),
-          ],
-        ),
-        _hideStuff
-            ? new Container()
-            : new IconButton(
-                icon: new Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
+          new Column(
+            children: <Widget>[
+              _latestValue != null &&
+                  !_latestValue.isPlaying &&
+                  _latestValue.duration == null ||
+                  _latestValue != null && _latestValue.isBuffering
+                  ? Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-                onPressed: () async {
-                  print("pressed true");
-                  widget.controller.pause();
-                  Navigator.pop(context);
-                },
-              ),
-      ]),
-    );
+              )
+                  : _buildHitArea(),
+              _buildBottomBar(context, widget.controller),
+            ],
+          ),
+
+          _hideStuff
+              ? new Container()
+              : new IconButton(
+            icon: new Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              print("pressed true");
+              widget.controller.pause();
+              Navigator.pop(context);
+            },
+          ),
+
+          GestureDetector (
+            behavior: _hideStuff ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+            onTap: () {
+              print("hit behaviour");
+
+              setState(() {
+                _hideStuff = !_hideStuff;
+              });
+            },
+            child : Container(),
+          ),
+        ]);
   }
 
   @override
@@ -121,9 +127,9 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   AnimatedOpacity _buildBottomBar(
-    BuildContext context,
-    VideoPlayerController controller,
-  ) {
+      BuildContext context,
+      VideoPlayerController controller,
+      ) {
     final iconColor = Theme.of(context).textTheme.button.color;
 
     return new AnimatedOpacity(
@@ -147,6 +153,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   GestureDetector _buildExpandButton() {
+
     return new GestureDetector(
       onTap: _onExpandCollapse,
       child: new AnimatedOpacity(
@@ -160,7 +167,7 @@ class _MaterialControlsState extends State<MaterialControls> {
             right: 8.0,
           ),
           child: new Center(
-            child: new Icon(
+            child: Icon(
               widget.fullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
               color: Colors.white,
             ),
@@ -171,30 +178,32 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   Expanded _buildHitArea() {
+    print("test"+ _latestValue.isPlaying.toString());
+    print("test"+_dragging.toString());
     return new Expanded(
       child: new GestureDetector(
         onTap: _latestValue != null && _latestValue.isPlaying
             ? () {
-                _playPause();
-                //_cancelAndRestartTimer;
-                setState(() {
-                  _hideStuff = false;
-                });
-              }
+          //_playPause();
+          //_cancelAndRestartTimer;
+          setState(() {
+            _hideStuff = false;
+          });
+        }
             : () {
-                _playPause();
-                setState(() {
-                  _hideStuff = true;
-                });
-              },
+          //  _playPause();
+          setState(() {
+            _hideStuff = true;
+          });
+        },
         child: new Container(
           color: Colors.transparent,
           child: new Center(
             child: new AnimatedOpacity(
               opacity:
-                  _latestValue != null && !_latestValue.isPlaying && !_dragging
-                      ? 1.0
-                      : 0.0,
+              !_hideStuff
+                  ? 1.0
+                  : 0.0,
               duration: new Duration(milliseconds: 300),
               child: new GestureDetector(
                 child: new Container(
@@ -204,10 +213,15 @@ class _MaterialControlsState extends State<MaterialControls> {
                   ),
                   child: new Padding(
                     padding: new EdgeInsets.only(top: 30.0),
-                    child: new Icon(
-                      Icons.play_arrow,
-                      size: 50.0,
-                      color: Colors.white,
+                    child: InkWell(
+                      onTap: (){
+                        _playPause();
+                      },
+                      child: Icon(
+                        _latestValue != null && _latestValue.isPlaying ? Icons.pause_circle_filled :  Icons.play_circle_filled,
+                        size: 50.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -220,8 +234,8 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   GestureDetector _buildMuteButton(
-    VideoPlayerController controller,
-  ) {
+      VideoPlayerController controller,
+      ) {
     return new GestureDetector(
       onTap: () {
         _cancelAndRestartTimer();
@@ -334,7 +348,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     _updateState();
 
     if ((widget.controller.value != null &&
-            widget.controller.value.isPlaying) ||
+        widget.controller.value.isPlaying) ||
         widget.autoPlay) {
       _startHideTimer();
     }
@@ -352,7 +366,7 @@ class _MaterialControlsState extends State<MaterialControls> {
 
       widget.onExpandCollapse().then((dynamic _) {
         _showAfterExpandCollapseTimer =
-            new Timer(new Duration(milliseconds: 300), () {
+        new Timer(new Duration(milliseconds: 300), () {
           setState(() {
             _cancelAndRestartTimer();
           });
@@ -425,4 +439,5 @@ class _MaterialControlsState extends State<MaterialControls> {
       ),
     );
   }
+
 }
