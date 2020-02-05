@@ -45,6 +45,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: _hideStuff ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
       onTap: (){
         setState(() {
           _hideStuff = !_hideStuff;
